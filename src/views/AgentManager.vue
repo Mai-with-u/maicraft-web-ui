@@ -1,7 +1,10 @@
 <template>
   <div class="agent-manager-page">
     <!-- 页面头部 -->
-    <PageHeader title="Agent 管理" description="启动和管理 Maicraft Agent 进程" />
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Agent 管理</h2>
+      <p class="text-gray-600 text-sm">启动和管理 Maicraft Agent 进程</p>
+    </div>
 
     <!-- 主要内容 -->
     <div class="agent-content">
@@ -10,8 +13,8 @@
         <el-col :span="24">
           <el-card class="status-card" shadow="never">
             <template #header>
-              <div class="card-header">
-                <span>Agent 状态</span>
+              <div class="flex justify-between items-center">
+                <span class="font-medium text-gray-900">Agent 状态</span>
                 <el-tag :type="agentStatusTagType" size="small">
                   {{ agentStatusText }}
                 </el-tag>
@@ -22,26 +25,26 @@
               <el-row :gutter="20">
                 <el-col :span="6">
                   <div class="status-item">
-                    <span class="label">运行状态:</span>
-                    <span class="value">{{ agentStatusText }}</span>
+                    <span class="status-item-label">运行状态:</span>
+                    <span class="status-item-value">{{ agentStatusText }}</span>
                   </div>
                 </el-col>
                 <el-col :span="6">
                   <div class="status-item">
-                    <span class="label">进程ID:</span>
-                    <span class="value">{{ agentPid || '无' }}</span>
+                    <span class="status-item-label">进程ID:</span>
+                    <span class="status-item-value">{{ agentPid || '无' }}</span>
                   </div>
                 </el-col>
                 <el-col :span="6">
                   <div class="status-item">
-                    <span class="label">运行时间:</span>
-                    <span class="value">{{ formatUptime(agentUptime) }}</span>
+                    <span class="status-item-label">运行时间:</span>
+                    <span class="status-item-value">{{ formatUptime(agentUptime) }}</span>
                   </div>
                 </el-col>
                 <el-col :span="6">
                   <div class="status-item">
-                    <span class="label">环境类型:</span>
-                    <span class="value">{{ envManagerType }}</span>
+                    <span class="status-item-label">环境类型:</span>
+                    <span class="status-item-value">{{ envManagerType }}</span>
                   </div>
                 </el-col>
               </el-row>
@@ -95,8 +98,8 @@
         <el-col :span="12">
           <el-card class="config-card" shadow="never">
             <template #header>
-              <div class="card-header">
-                <span>Agent 配置</span>
+              <div class="flex justify-between items-center">
+                <span class="font-medium text-gray-900">Agent 配置</span>
               </div>
             </template>
 
@@ -190,8 +193,8 @@
         <el-col :span="12">
           <el-card class="info-card" shadow="never">
             <template #header>
-              <div class="card-header">
-                <span>环境信息</span>
+              <div class="flex justify-between items-center">
+                <span class="font-medium text-gray-900">环境信息</span>
               </div>
             </template>
 
@@ -637,112 +640,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.agent-manager-page {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.page-header {
-  margin-bottom: 24px;
-}
-
-.page-header h2 {
-  margin: 0 0 8px 0;
-  color: #333;
-  font-size: 24px;
-  font-weight: 600;
-}
-
-.header-description {
-  color: #666;
-  font-size: 14px;
-}
-
-.agent-content {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  padding: 20px;
-}
-
-.status-card,
-.config-card,
-.info-card {
-  margin-bottom: 20px;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.agent-status {
-  padding: 20px 0;
-}
-
-.status-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 0;
-}
-
-.status-item .label {
-  font-weight: 500;
-  color: #666;
-  min-width: 80px;
-}
-
-.status-item .value {
-  color: #333;
-  font-weight: 500;
-}
-
-.config-form {
-  padding: 20px 0;
-}
-
-.config-form .el-form-item {
-  margin-bottom: 20px;
-}
-
-.config-form .el-form-item__label {
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 8px;
-}
-
-.form-tip {
-  font-size: 12px;
-  color: #999;
-  margin-top: 4px;
-}
-
-.env-info {
-  padding: 20px 0;
-}
-
-.env-list {
-  margin-top: 10px;
-}
-
-.env-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-radius: 6px;
-}
-
-.env-item .el-tag {
-  min-width: 60px;
-}
-
-/* 响应式设计 */
+/* 只保留响应式设计 */
 @media (max-width: 768px) {
   .agent-manager-page {
     padding: 10px;
@@ -758,8 +656,19 @@ onMounted(() => {
     gap: 4px;
   }
 
-  .status-item .label {
+  .status-item-label {
     min-width: auto;
+  }
+
+  /* Form item样式 */
+  .el-form-item {
+    margin-bottom: 20px;
+  }
+
+  .el-form-item__label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
   }
 }
 </style>

@@ -16,7 +16,7 @@
       <el-card class="control-card" shadow="never">
         <div class="control-row">
           <div class="control-item">
-            <label>更新间隔 (毫秒):</label>
+            <label class="control-item-label">更新间隔 (毫秒):</label>
             <el-input-number
               v-model="updateInterval"
               :min="0"
@@ -28,7 +28,7 @@
             />
           </div>
           <div class="control-item">
-            <label>模型过滤:</label>
+            <label class="control-item-label">模型过滤:</label>
             <el-input
               v-model="modelFilter"
               placeholder="输入模型名称关键词"
@@ -112,8 +112,8 @@
     <div class="models-section">
       <el-card class="models-card" shadow="never">
         <template #header>
-          <div class="card-header">
-            <span>模型使用详情</span>
+          <div class="flex justify-between items-center">
+            <span class="font-medium text-gray-900">模型使用详情</span>
             <el-button type="text" @click="toggleExpandAll">
               {{ allExpanded ? '全部折叠' : '全部展开' }}
             </el-button>
@@ -506,152 +506,10 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-@import '@/styles/common.css';
-
-.token-usage-page {
-  padding: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-/* 页面头部样式已移至通用样式文件 */
-
-/* 头部和控制面板样式已移至通用样式文件 */
-
-/* 控制项样式已移至通用样式文件 */
-
-.control-item label {
-  font-weight: 500;
-  color: #666;
-  white-space: nowrap;
-}
-
-.summary-section {
-  margin-bottom: 24px;
-}
-
-.stat-card {
-  height: 100px;
-}
-
-.stat-content {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.stat-icon {
-  font-size: 32px;
-  color: #409eff;
-}
-
-.stat-info {
-  flex: 1;
-}
-
-.stat-value {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 4px;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: #666;
-}
-
-.models-section {
-  margin-bottom: 24px;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.models-list {
-  max-height: 600px;
-  overflow-y: auto;
-}
-
-.model-item {
-  margin-bottom: 8px;
-}
-
-.model-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.model-name {
-  font-weight: 600;
-  color: #333;
-}
-
-.model-stats {
-  display: flex;
-  gap: 8px;
-}
-
-.model-details {
-  padding: 16px 0;
-}
-
-.detail-section {
-  margin-bottom: 20px;
-}
-
-.detail-section h4 {
-  margin: 0 0 12px 0;
-  color: #333;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.stat-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-radius: 4px;
-}
-
-.stat-label {
-  color: #666;
-  font-size: 14px;
-}
-
-.stat-value {
-  font-weight: 500;
-  color: #333;
-}
-
-.no-data {
-  padding: 40px;
-}
-
-/* 响应式设计 */
+/* 只保留响应式设计 */
 @media (max-width: 768px) {
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .header-actions {
-    width: 100%;
-    justify-content: flex-end;
+  .token-usage-page {
+    padding: 10px;
   }
 
   .control-row {
@@ -660,14 +518,17 @@ onUnmounted(() => {
     gap: 12px;
   }
 
-  .summary-section .el-col {
-    margin-bottom: 16px;
+  .control-item {
+    width: 100%;
   }
 
-  .stat-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 8px;
+  .control-item-label {
+    min-width: auto;
+    margin-bottom: 4px;
+  }
+
+  .models-list {
+    max-height: 400px;
   }
 
   .model-header {
@@ -678,11 +539,43 @@ onUnmounted(() => {
 
   .model-stats {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: flex-start;
+  }
+
+  .detail-section h4 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
   }
 
   .stats-grid {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 4px;
+  }
+
+  .stat-label {
+    color: #666;
+    font-size: 14px;
+  }
+
+  .stat-value {
+    font-weight: 500;
+    color: #333;
+  }
+
+  .no-data {
+    padding: 40px;
   }
 }
 </style>
