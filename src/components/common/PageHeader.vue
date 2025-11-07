@@ -1,10 +1,12 @@
 <template>
-  <div class="page-header">
+  <div class="page-header-component">
     <div class="header-left">
       <!-- 默认标题显示 -->
-      <div v-if="title && !$slots.default" class="default-title">
-        <h2>{{ title }}</h2>
-        <p v-if="description" class="page-description">{{ description }}</p>
+      <div v-if="title && !$slots.default" class="flex flex-col">
+        <h2 class="page-header-title">{{ title }}</h2>
+        <p v-if="description" class="text-gray-600 text-sm mt-1 leading-relaxed">
+          {{ description }}
+        </p>
       </div>
       <!-- 自定义标题内容 -->
       <slot />
@@ -92,56 +94,9 @@ defineOptions({
 </script>
 
 <style scoped>
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  background: white;
-  padding: 16px 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.page-header h2 {
-  margin: 0;
-  color: #333;
-  font-size: 24px;
-  font-weight: 600;
-}
-
-.page-description {
-  margin: 4px 0 0 0;
-  color: #606266;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.header-left {
-  display: flex;
-  flex-direction: column;
-}
-
-.default-title h2 {
-  margin: 0;
-  color: #333;
-  font-size: 24px;
-  font-weight: 600;
-}
-
-.connection-status {
-  margin-right: 12px;
-}
-
-.connection-buttons {
-  display: flex;
-  gap: 12px;
-  margin-right: 12px;
-}
-
-/* 响应式设计 */
+/* 只保留响应式设计 */
 @media (max-width: 768px) {
-  .page-header {
+  .page-header-component {
     flex-direction: column;
     gap: 16px;
     align-items: stretch;

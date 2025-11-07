@@ -222,6 +222,304 @@ export default defineConfig({
     ['text-sm', { 'font-size': '14px' }],
     ['text-xs', { 'font-size': '12px' }],
 
+    // PageHeader相关样式
+    [
+      'page-header-component',
+      {
+        display: 'flex',
+        'justify-content': 'space-between',
+        'align-items': 'center',
+        'margin-bottom': '20px',
+        background: 'white',
+        padding: '16px 20px',
+        'border-radius': '8px',
+        'box-shadow': '0 2px 4px rgba(0, 0, 0, 0.1)',
+      },
+    ],
+    [
+      'page-header-title',
+      {
+        margin: '0',
+        color: '#333',
+        'font-size': '24px',
+        'font-weight': '600',
+      },
+    ],
+    [
+      'header-left',
+      {
+        display: 'flex',
+        'flex-direction': 'column',
+      },
+    ],
+    [
+      'header-actions',
+      {
+        display: 'flex',
+        'align-items': 'center',
+        gap: '12px',
+      },
+    ],
+    [
+      'connection-status',
+      {
+        'margin-right': '12px',
+      },
+    ],
+    [
+      'connection-buttons',
+      {
+        display: 'flex',
+        gap: '12px',
+        'margin-right': '12px',
+      },
+    ],
+
+    // StatusDisplay相关样式
+    [
+      'status-display',
+      {
+        display: 'grid',
+        gap: '16px',
+        'grid-template-columns': 'repeat(auto-fit, minmax(150px, 1fr))',
+      },
+    ],
+    [
+      'status-display-small',
+      {
+        gap: '12px',
+      },
+    ],
+    [
+      'status-display-large',
+      {
+        gap: '24px',
+      },
+    ],
+    [
+      'status-description',
+      {
+        'font-size': '12px',
+        color: '#909399',
+        'margin-top': '4px',
+        'line-height': '1.2',
+      },
+    ],
+
+    // Home页面相关样式
+    [
+      'home-container',
+      {
+        padding: '20px',
+        height: '100%',
+        'overflow-y': 'auto',
+        background: '#f5f5f5',
+      },
+    ],
+    [
+      'home-page-header',
+      {
+        'text-align': 'center',
+        'margin-bottom': '40px',
+        padding: '20px 0',
+      },
+    ],
+    [
+      'home-page-title',
+      {
+        'font-size': '32px',
+        'font-weight': '700',
+        color: '#333',
+        'margin-bottom': '8px',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        '-webkit-background-clip': 'text',
+        '-webkit-text-fill-color': 'transparent',
+        'background-clip': 'text',
+      },
+    ],
+    [
+      'home-page-description',
+      {
+        'font-size': '16px',
+        color: '#666',
+        margin: '0',
+      },
+    ],
+    [
+      'page-grid',
+      {
+        display: 'grid',
+        'grid-template-columns': 'repeat(auto-fill, minmax(280px, 1fr))',
+        gap: '24px',
+        'max-width': '1200px',
+        margin: '0 auto',
+      },
+    ],
+    [
+      'page-card',
+      {
+        background: 'white',
+        'border-radius': '12px',
+        padding: '24px',
+        'text-align': 'center',
+        border: '1px solid #e6e6e6',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+        'box-shadow': '0 2px 8px rgba(0, 0, 0, 0.1)',
+      },
+    ],
+    [
+      'page-card-hover',
+      {
+        transform: 'translateY(-4px)',
+        'box-shadow': '0 8px 25px rgba(0, 0, 0, 0.15)',
+        'border-color': '#409eff',
+      },
+    ],
+    [
+      'page-icon',
+      {
+        'font-size': '48px',
+        color: '#409eff',
+        'margin-bottom': '16px',
+        display: 'block',
+      },
+    ],
+    [
+      'page-card-title',
+      {
+        'font-size': '18px',
+        'font-weight': '600',
+        'margin-bottom': '8px',
+        color: '#333',
+      },
+    ],
+    [
+      'page-card-desc',
+      {
+        'font-size': '14px',
+        color: '#666',
+        'line-height': '1.5',
+        margin: '0',
+      },
+    ],
+    [
+      'debug-card',
+      {
+        'border-color': '#e6a23c',
+      },
+    ],
+    [
+      'debug-card-hover',
+      {
+        'border-color': '#e6a23c',
+        'box-shadow': '0 8px 25px rgba(230, 162, 60, 0.2)',
+      },
+    ],
+    [
+      'debug-icon',
+      {
+        color: '#e6a23c',
+      },
+    ],
+    [
+      'debug-section-title',
+      {
+        'grid-column': '1 / -1',
+        'text-align': 'center',
+        margin: '40px 0 20px 0',
+        padding: '20px 0',
+        'border-top': '2px solid #e6e6e6',
+        background: 'linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%)',
+        'border-radius': '8px',
+      },
+    ],
+    [
+      'debug-section-title-h2',
+      {
+        'font-size': '20px',
+        'font-weight': '600',
+        color: '#856404',
+        margin: '0',
+      },
+    ],
+    [
+      'projects-section',
+      {
+        'margin-top': '60px',
+        padding: '30px 20px',
+        background: '#fafafa',
+        'border-radius': '12px',
+        border: '1px solid #e6e6e6',
+      },
+    ],
+    [
+      'projects-header',
+      {
+        'text-align': 'center',
+        'margin-bottom': '24px',
+      },
+    ],
+    [
+      'projects-title',
+      {
+        'font-size': '20px',
+        'font-weight': '600',
+        color: '#333',
+        'margin-bottom': '4px',
+      },
+    ],
+    [
+      'projects-description',
+      {
+        'font-size': '14px',
+        color: '#666',
+        margin: '0',
+      },
+    ],
+    [
+      'projects-links',
+      {
+        display: 'grid',
+        'grid-template-columns': 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: '12px',
+        'margin-bottom': '20px',
+      },
+    ],
+    [
+      'project-link-item',
+      {
+        display: 'flex',
+        'align-items': 'center',
+        gap: '8px',
+        padding: '12px 16px',
+        background: 'white',
+        border: '1px solid #e6e6e6',
+        'border-radius': '8px',
+        'text-decoration': 'none',
+        color: '#333',
+        transition: 'all 0.3s ease',
+        'font-size': '14px',
+        'font-weight': '500',
+      },
+    ],
+    [
+      'project-link-item-hover',
+      {
+        'border-color': '#409eff',
+        'box-shadow': '0 2px 8px rgba(64, 158, 255, 0.2)',
+        color: '#409eff',
+      },
+    ],
+    [
+      'project-link-item-current',
+      {
+        'border-color': '#67c23a',
+        background: '#f0f9ff',
+        color: '#67c23a',
+      },
+    ],
+
     // Sidebar相关样式
     [
       'sidebar',
@@ -389,6 +687,45 @@ export default defineConfig({
     'status-item',
     'status-label',
     'status-value',
+
+    // PageHeader组件类
+    'page-header-component',
+    'page-header-title',
+    'header-left',
+    'header-actions',
+    'connection-status',
+    'connection-buttons',
+
+    // StatusDisplay组件类
+    'status-display',
+    'status-display-small',
+    'status-display-large',
+    'status-description',
+
+    // Home页面类
+    'home-container',
+    'home-page-header',
+    'home-page-title',
+    'home-page-description',
+    'page-grid',
+    'page-card',
+    'page-card-hover',
+    'page-icon',
+    'page-card-title',
+    'page-card-desc',
+    'debug-card',
+    'debug-card-hover',
+    'debug-icon',
+    'debug-section-title',
+    'debug-section-title-h2',
+    'projects-section',
+    'projects-header',
+    'projects-title',
+    'projects-description',
+    'projects-links',
+    'project-link-item',
+    'project-link-item-hover',
+    'project-link-item-current',
     'grid-2',
     'grid-3',
     'grid-auto-fit',
