@@ -1,5 +1,48 @@
 import { defineConfig, presetUno, presetIcons } from 'unocss'
 
+// 颜色常量
+const colors = {
+  primary: '#409eff',
+  success: '#67c23a',
+  warning: '#e6a23c',
+  danger: '#f56c6c',
+  info: '#909399',
+  gray: {
+    100: '#f5f5f5',
+    200: '#e6e6e6',
+    300: '#d0d0d0',
+    400: '#909399',
+    500: '#666',
+    600: '#606266',
+    700: '#333',
+    800: '#303133',
+    900: '#1a1a1a',
+  },
+}
+
+// 通用样式生成器
+const createCardStyle = (bg = 'white', shadow = '0 2px 4px rgba(0, 0, 0, 0.1)') => ({
+  background: bg,
+  'border-radius': '8px',
+  'box-shadow': shadow,
+})
+
+const createFlexStyle = (direction = 'row', justify = 'center', align = 'center', gap = '8px') => ({
+  display: 'flex',
+  'flex-direction': direction,
+  'justify-content': justify,
+  'align-items': align,
+  gap,
+})
+
+// 生成颜色变体规则的辅助函数
+const createColorVariants = (prefix: string, baseStyles: any, colors: Record<string, string>) => {
+  return Object.entries(colors).map(([key, color]) => [
+    `${prefix}-${key}`,
+    { ...baseStyles, color },
+  ])
+}
+
 export default defineConfig({
   // 启用预设
   presets: [
@@ -14,72 +57,69 @@ export default defineConfig({
 
   // 自定义规则
   rules: [
-    // 自定义页面头部样式
+    // === 基础样式 ===
     [
       'page-header',
       {
-        display: 'flex',
-        'justify-content': 'space-between',
-        'align-items': 'center',
+        ...createFlexStyle('row', 'space-between', 'center'),
         'margin-bottom': '20px',
         padding: '16px 0',
-        'border-bottom': '1px solid #e4e7ed',
+        'border-bottom': `1px solid ${colors.gray[200]}`,
       },
     ],
 
-    // 页面头部标题
-    [
-      'page-title',
+    // 颜色变体
+    ...createColorVariants('text', {}, colors),
+    ...createColorVariants('text', {}, colors.gray),
+
+    // 字体大小变体
+    ...['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl'].map((size) => [
+      `text-${size}`,
       {
-        margin: '0',
-        color: '#303133',
-        'font-size': '20px',
-        'font-weight': '600',
+        'font-size':
+          size === 'xs'
+            ? '12px'
+            : size === 'sm'
+              ? '14px'
+              : size === 'base'
+                ? '16px'
+                : size === 'lg'
+                  ? '18px'
+                  : size === 'xl'
+                    ? '20px'
+                    : size === '2xl'
+                      ? '24px'
+                      : '32px',
       },
-    ],
+    ]),
 
-    // 页面描述
-    [
-      'page-desc',
-      {
-        margin: '4px 0 0 0',
-        color: '#606266',
-        'font-size': '14px',
-        'line-height': '1.4',
-      },
-    ],
-
-    // 状态显示项
+    // === 状态相关样式 ===
     [
       'status-item',
       {
         'text-align': 'center',
         padding: '20px',
-        background: '#f8f9fa',
+        background: colors.gray[100],
         'border-radius': '8px',
-        border: '1px solid #e9ecef',
+        border: `1px solid ${colors.gray[200]}`,
         transition: 'all 0.3s ease',
       },
     ],
-
-    // 状态标签
     [
       'status-label',
       {
         'font-size': '14px',
-        color: '#666',
+        color: colors.gray[500],
         'margin-bottom': '8px',
         'font-weight': '500',
       },
     ],
-
-    // 状态值
     [
       'status-value',
       {
         'font-size': '20px',
         'font-weight': 'bold',
-        color: '#333',
+        color: colors.gray[700],
       },
     ],
 
@@ -222,57 +262,31 @@ export default defineConfig({
     ['text-sm', { 'font-size': '14px' }],
     ['text-xs', { 'font-size': '12px' }],
 
-    // PageHeader相关样式
+    // === PageHeader相关样式 ===
     [
       'page-header-component',
       {
-        display: 'flex',
-        'justify-content': 'space-between',
-        'align-items': 'center',
+        ...createCardStyle('white', '0 2px 4px rgba(0, 0, 0, 0.1)'),
+        ...createFlexStyle('row', 'space-between', 'center'),
         'margin-bottom': '20px',
-        background: 'white',
         padding: '16px 20px',
-        'border-radius': '8px',
-        'box-shadow': '0 2px 4px rgba(0, 0, 0, 0.1)',
       },
     ],
     [
       'page-header-title',
       {
         margin: '0',
-        color: '#333',
+        color: colors.gray[700],
         'font-size': '24px',
         'font-weight': '600',
       },
     ],
-    [
-      'header-left',
-      {
-        display: 'flex',
-        'flex-direction': 'column',
-      },
-    ],
-    [
-      'header-actions',
-      {
-        display: 'flex',
-        'align-items': 'center',
-        gap: '12px',
-      },
-    ],
-    [
-      'connection-status',
-      {
-        'margin-right': '12px',
-      },
-    ],
+    ['header-left', createFlexStyle('column')],
+    ['header-actions', createFlexStyle('row', 'flex-start', 'center', '12px')],
+    ['connection-status', { 'margin-right': '12px' }],
     [
       'connection-buttons',
-      {
-        display: 'flex',
-        gap: '12px',
-        'margin-right': '12px',
-      },
+      { ...createFlexStyle('row', 'flex-start', 'center', '12px'), 'margin-right': '12px' },
     ],
 
     // StatusDisplay相关样式
@@ -306,30 +320,18 @@ export default defineConfig({
       },
     ],
 
-    // Home页面相关样式
+    // === Home页面相关样式 ===
     [
       'home-container',
-      {
-        padding: '20px',
-        height: '100%',
-        'overflow-y': 'auto',
-        background: '#f5f5f5',
-      },
+      { padding: '20px', height: '100%', 'overflow-y': 'auto', background: colors.gray[100] },
     ],
-    [
-      'home-page-header',
-      {
-        'text-align': 'center',
-        'margin-bottom': '40px',
-        padding: '20px 0',
-      },
-    ],
+    ['home-page-header', { 'text-align': 'center', 'margin-bottom': '40px', padding: '20px 0' }],
     [
       'home-page-title',
       {
         'font-size': '32px',
         'font-weight': '700',
-        color: '#333',
+        color: colors.gray[700],
         'margin-bottom': '8px',
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         '-webkit-background-clip': 'text',
@@ -337,14 +339,9 @@ export default defineConfig({
         'background-clip': 'text',
       },
     ],
-    [
-      'home-page-description',
-      {
-        'font-size': '16px',
-        color: '#666',
-        margin: '0',
-      },
-    ],
+    ['home-page-description', { 'font-size': '16px', color: colors.gray[500], margin: '0' }],
+
+    // 页面卡片系统
     [
       'page-grid',
       {
@@ -358,14 +355,12 @@ export default defineConfig({
     [
       'page-card',
       {
-        background: 'white',
-        'border-radius': '12px',
+        ...createCardStyle('white', '0 2px 8px rgba(0, 0, 0, 0.1)'),
         padding: '24px',
         'text-align': 'center',
-        border: '1px solid #e6e6e6',
+        border: `1px solid ${colors.gray[200]}`,
         cursor: 'pointer',
         transition: 'all 0.3s ease',
-        'box-shadow': '0 2px 8px rgba(0, 0, 0, 0.1)',
       },
     ],
     [
@@ -373,17 +368,12 @@ export default defineConfig({
       {
         transform: 'translateY(-4px)',
         'box-shadow': '0 8px 25px rgba(0, 0, 0, 0.15)',
-        'border-color': '#409eff',
+        'border-color': colors.primary,
       },
     ],
     [
       'page-icon',
-      {
-        'font-size': '48px',
-        color: '#409eff',
-        'margin-bottom': '16px',
-        display: 'block',
-      },
+      { 'font-size': '48px', color: colors.primary, 'margin-bottom': '16px', display: 'block' },
     ],
     [
       'page-card-title',
@@ -391,37 +381,23 @@ export default defineConfig({
         'font-size': '18px',
         'font-weight': '600',
         'margin-bottom': '8px',
-        color: '#333',
+        color: colors.gray[700],
       },
     ],
     [
       'page-card-desc',
-      {
-        'font-size': '14px',
-        color: '#666',
-        'line-height': '1.5',
-        margin: '0',
-      },
+      { 'font-size': '14px', color: colors.gray[500], 'line-height': '1.5', margin: '0' },
     ],
-    [
-      'debug-card',
-      {
-        'border-color': '#e6a23c',
-      },
-    ],
+
+    // 调试卡片变体
+    ['debug-card', { 'border-color': colors.warning }],
     [
       'debug-card-hover',
-      {
-        'border-color': '#e6a23c',
-        'box-shadow': '0 8px 25px rgba(230, 162, 60, 0.2)',
-      },
+      { 'border-color': colors.warning, 'box-shadow': `0 8px 25px ${colors.warning}33` },
     ],
-    [
-      'debug-icon',
-      {
-        color: '#e6a23c',
-      },
-    ],
+    ['debug-icon', { color: colors.warning }],
+
+    // 调试区域标题
     [
       'debug-section-title',
       {
@@ -429,7 +405,7 @@ export default defineConfig({
         'text-align': 'center',
         margin: '40px 0 20px 0',
         padding: '20px 0',
-        'border-top': '2px solid #e6e6e6',
+        'border-top': `2px solid ${colors.gray[200]}`,
         background: 'linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%)',
         'border-radius': '8px',
       },
@@ -443,40 +419,29 @@ export default defineConfig({
         margin: '0',
       },
     ],
+
+    // 项目展示区域
     [
       'projects-section',
       {
         'margin-top': '60px',
         padding: '30px 20px',
-        background: '#fafafa',
+        background: colors.gray[100],
         'border-radius': '12px',
-        border: '1px solid #e6e6e6',
+        border: `1px solid ${colors.gray[200]}`,
       },
     ],
-    [
-      'projects-header',
-      {
-        'text-align': 'center',
-        'margin-bottom': '24px',
-      },
-    ],
+    ['projects-header', { 'text-align': 'center', 'margin-bottom': '24px' }],
     [
       'projects-title',
       {
         'font-size': '20px',
         'font-weight': '600',
-        color: '#333',
+        color: colors.gray[700],
         'margin-bottom': '4px',
       },
     ],
-    [
-      'projects-description',
-      {
-        'font-size': '14px',
-        color: '#666',
-        margin: '0',
-      },
-    ],
+    ['projects-description', { 'font-size': '14px', color: colors.gray[500], margin: '0' }],
     [
       'projects-links',
       {
@@ -489,15 +454,13 @@ export default defineConfig({
     [
       'project-link-item',
       {
-        display: 'flex',
-        'align-items': 'center',
-        gap: '8px',
+        ...createFlexStyle('row', 'flex-start', 'center', '8px'),
         padding: '12px 16px',
         background: 'white',
-        border: '1px solid #e6e6e6',
+        border: `1px solid ${colors.gray[200]}`,
         'border-radius': '8px',
         'text-decoration': 'none',
-        color: '#333',
+        color: colors.gray[700],
         transition: 'all 0.3s ease',
         'font-size': '14px',
         'font-weight': '500',
@@ -506,49 +469,31 @@ export default defineConfig({
     [
       'project-link-item-hover',
       {
-        'border-color': '#409eff',
-        'box-shadow': '0 2px 8px rgba(64, 158, 255, 0.2)',
-        color: '#409eff',
+        'border-color': colors.primary,
+        'box-shadow': `0 2px 8px ${colors.primary}33`,
+        color: colors.primary,
       },
     ],
     [
       'project-link-item-current',
       {
-        'border-color': '#67c23a',
+        'border-color': colors.success,
         background: '#f0f9ff',
-        color: '#67c23a',
+        color: colors.success,
       },
     ],
 
-    // Settings页面相关样式
-    [
-      'settings-page',
-      {
-        padding: '20px',
-        'max-width': '1200px',
-        margin: '0 auto',
-      },
-    ],
+    // === Settings页面相关样式 ===
+    ['settings-page', { padding: '20px', 'max-width': '1200px', margin: '0 auto' }],
     [
       'config-content',
       {
-        background: 'white',
+        ...createCardStyle('white', '0 2px 12px rgba(0, 0, 0, 0.08)'),
         'border-radius': '12px',
-        'box-shadow': '0 2px 12px rgba(0, 0, 0, 0.08)',
       },
     ],
-    [
-      'config-section',
-      {
-        padding: '20px',
-      },
-    ],
-    [
-      'config-card',
-      {
-        'margin-bottom': '20px',
-      },
-    ],
+    ['config-section', { padding: '20px' }],
+    ['config-card', { 'margin-bottom': '20px' }],
     [
       'config-items',
       {
@@ -560,177 +505,62 @@ export default defineConfig({
     [
       'config-item',
       {
-        display: 'flex',
-        'align-items': 'center',
-        gap: '12px',
+        ...createFlexStyle('row', 'flex-start', 'center', '12px'),
         padding: '12px 16px',
-        background: '#f8f9fa',
+        background: colors.gray[100],
         'border-radius': '6px',
       },
     ],
-    [
-      'config-item-label',
-      {
-        'font-weight': '500',
-        color: '#666',
-        'min-width': '100px',
-      },
-    ],
-    [
-      'config-item-value',
-      {
-        color: '#333',
-        'font-weight': '500',
-      },
-    ],
-    [
-      'config-form',
-      {
-        padding: '20px 0',
-      },
-    ],
-    [
-      'config-form-item',
-      {
-        'margin-bottom': '20px',
-      },
-    ],
+    ['config-item-label', { 'font-weight': '500', color: colors.gray[500], 'min-width': '100px' }],
+    ['config-item-value', { color: colors.gray[700], 'font-weight': '500' }],
+    ['config-form', { padding: '20px 0' }],
+    ['config-form-item', { 'margin-bottom': '20px' }],
     [
       'config-form-label',
-      {
-        'font-weight': '500',
-        color: '#333',
-        'margin-bottom': '8px',
-      },
+      { 'font-weight': '500', color: colors.gray[700], 'margin-bottom': '8px' },
     ],
-    [
-      'import-form',
-      {
-        padding: '20px 0',
-      },
-    ],
+    ['import-form', { padding: '20px 0' }],
 
-    // HeartbeatTest页面相关样式
-    [
-      'heartbeat-test-page',
-      {
-        padding: '20px',
-        'max-width': '1400px',
-        margin: '0 auto',
-      },
-    ],
-    [
-      'test-config',
-      {
-        'margin-bottom': '24px',
-      },
-    ],
-    [
-      'config-row',
-      {
-        display: 'flex',
-        'align-items': 'center',
-        gap: '20px',
-        'flex-wrap': 'wrap',
-      },
-    ],
-    [
-      'config-item',
-      {
-        display: 'flex',
-        'align-items': 'center',
-        gap: '8px',
-      },
-    ],
+    // === HeartbeatTest页面相关样式 ===
+    ['heartbeat-test-page', { padding: '20px', 'max-width': '1400px', margin: '0 auto' }],
+    ['test-config', { 'margin-bottom': '24px' }],
+    ['config-row', createFlexStyle('row', 'flex-start', 'center', '20px')],
+    ['config-item', createFlexStyle('row', 'flex-start', 'center', '8px')],
     [
       'config-item-label',
-      {
-        'font-weight': '500',
-        color: '#666',
-        'white-space': 'nowrap',
-      },
+      { 'font-weight': '500', color: colors.gray[500], 'white-space': 'nowrap' },
     ],
-    [
-      'test-results',
-      {
-        'margin-bottom': '24px',
-      },
-    ],
-    [
-      'stats-card',
-      {
-        height: '100%',
-      },
-    ],
-    [
-      'stats-content',
-      {
-        display: 'flex',
-        'flex-direction': 'column',
-        gap: '12px',
-      },
-    ],
+    ['test-results', { 'margin-bottom': '24px' }],
+    ['stats-card', { height: '100%' }],
+    ['stats-content', createFlexStyle('column', 'flex-start', 'flex-start', '12px')],
+
+    // 统计项样式
     [
       'stat-item',
       {
-        display: 'flex',
-        'justify-content': 'space-between',
-        'align-items': 'center',
+        ...createFlexStyle('row', 'space-between', 'center'),
         padding: '8px 0',
-        'border-bottom': '1px solid #f0f0f0',
+        'border-bottom': `1px solid ${colors.gray[200]}`,
       },
     ],
-    [
-      'stat-item:last-child',
-      {
-        'border-bottom': 'none',
-      },
-    ],
-    [
-      'stat-label',
-      {
-        color: '#666',
-        'font-size': '14px',
-      },
-    ],
-    [
+    ['stat-item:last-child', { 'border-bottom': 'none' }],
+    ['stat-label', { color: colors.gray[500], 'font-size': '14px' }],
+    ['stat-value', { 'font-weight': '600', color: colors.gray[700] }],
+    ...createColorVariants(
       'stat-value',
-      {
-        'font-weight': '600',
-        color: '#333',
-      },
-    ],
-    [
-      'stat-value-success',
-      {
-        color: '#67c23a',
-      },
-    ],
-    [
-      'stat-value-warning',
-      {
-        color: '#e6a23c',
-      },
-    ],
-    [
-      'stat-value-error',
-      {
-        color: '#f56c6c',
-      },
-    ],
-    [
-      'logs-card',
-      {
-        height: '400px',
-      },
-    ],
+      { 'font-weight': '600' },
+      { success: colors.success, warning: colors.warning, error: colors.danger },
+    ),
+
+    // 日志相关样式
+    ['logs-card', { height: '400px' }],
     [
       'logs-container',
       {
         height: '320px',
         'overflow-y': 'auto',
         padding: '16px',
-        background: '#fafafa',
+        background: colors.gray[100],
         'border-radius': '4px',
       },
     ],
@@ -745,41 +575,20 @@ export default defineConfig({
         'line-height': '1.4',
       },
     ],
-    [
-      'log-item-info',
+
+    // 日志级别样式（使用颜色变体生成器）
+    ...createColorVariants(
+      'log-item',
+      { background: '#f0f9ff', 'border-left': '3px solid' },
       {
-        background: '#f0f9ff',
-        'border-left': '3px solid #409eff',
+        info: colors.primary,
+        success: colors.success,
+        warning: colors.warning,
+        error: colors.danger,
       },
-    ],
-    [
-      'log-item-success',
-      {
-        background: '#f0f9ff',
-        'border-left': '3px solid #67c23a',
-      },
-    ],
-    [
-      'log-item-warning',
-      {
-        background: '#fdf6ec',
-        'border-left': '3px solid #e6a23c',
-      },
-    ],
-    [
-      'log-item-error',
-      {
-        background: '#fef0f0',
-        'border-left': '3px solid #f56c6c',
-      },
-    ],
-    [
-      'log-time',
-      {
-        color: '#909399',
-        'margin-right': '8px',
-      },
-    ],
+    ).map(([key, styles]) => [key.replace('text-', 'log-item-'), styles]),
+
+    ['log-time', { color: colors.gray[400], 'margin-right': '8px' }],
     [
       'log-level',
       {
@@ -792,46 +601,24 @@ export default defineConfig({
         'margin-right': '8px',
       },
     ],
-    [
-      'log-level-info',
+    ...createColorVariants(
+      'log-level',
+      {},
       {
-        background: '#ecf5ff',
-        color: '#409eff',
+        info: colors.primary,
+        success: colors.success,
+        warning: colors.warning,
+        error: colors.danger,
       },
-    ],
-    [
-      'log-level-success',
+    ).map(([key, styles]) => [
+      key.replace('text-', 'log-level-'),
       {
-        background: '#f0f9ff',
-        color: '#67c23a',
+        ...styles,
+        background: `${styles.color}1A`, // 添加背景色
       },
-    ],
-    [
-      'log-level-warning',
-      {
-        background: '#fdf6ec',
-        color: '#e6a23c',
-      },
-    ],
-    [
-      'log-level-error',
-      {
-        background: '#fef0f0',
-        color: '#f56c6c',
-      },
-    ],
-    [
-      'log-message',
-      {
-        color: '#333',
-      },
-    ],
-    [
-      'no-logs',
-      {
-        padding: '40px',
-      },
-    ],
+    ]),
+    ['log-message', { color: colors.gray[700] }],
+    ['no-logs', { padding: '40px' }],
 
     // Sidebar相关样式
     [
@@ -936,55 +723,30 @@ export default defineConfig({
 
   // 安全列表，确保这些类不会被清除
   safelist: [
-    // 响应式网格类
-    'grid-cols-2',
-    'grid-cols-3',
-    'grid-cols-4',
-    'md:grid-cols-1',
-    'lg:grid-cols-2',
-    'lg:grid-cols-3',
+    // === 动态生成的类（必须保留） ===
+    // HeartbeatTest页面动态生成的统计值颜色类
+    'stat-value-success',
+    'stat-value-warning',
+    'stat-value-error',
 
-    // 间距类
-    'mb-0',
-    'mb-1',
-    'mb-2',
-    'mb-3',
-    'mb-4',
-    'mt-0',
-    'mt-1',
-    'mt-2',
-    'mt-3',
-    'mt-4',
-    'p-1',
-    'p-2',
-    'p-3',
-    'p-4',
+    // HeartbeatTest页面动态生成的日志级别类
+    'log-level-info',
+    'log-level-success',
+    'log-level-warning',
+    'log-level-error',
 
-    // 文本对齐
-    'text-center',
-    'text-left',
-    'text-right',
+    // HeartbeatTest页面动态生成的日志项类
+    'log-item-info',
+    'log-item-success',
+    'log-item-warning',
+    'log-item-error',
 
-    // 字体粗细
-    'font-bold',
-    'font-medium',
-    'font-normal',
-
-    // Flex工具类
-    'flex',
-    'flex-col',
-    'items-center',
-    'justify-center',
-    'justify-between',
-    'gap-1',
-    'gap-2',
-    'gap-3',
-
+    // === 预设类（可能被摇树优化） ===
     // 动画类
     'fade-in',
     'slide-up',
 
-    // 日志级别颜色类
+    // 一些可能检测不到的预设类
     'level-trace',
     'level-debug',
     'level-info',
@@ -992,141 +754,6 @@ export default defineConfig({
     'level-warning',
     'level-error',
     'level-critical',
-
-    // 自定义组件类
-    'page-header',
-    'page-title',
-    'page-desc',
-    'status-item',
-    'status-label',
-    'status-value',
-
-    // PageHeader组件类
-    'page-header-component',
-    'page-header-title',
-    'header-left',
-    'header-actions',
-    'connection-status',
-    'connection-buttons',
-
-    // StatusDisplay组件类
-    'status-display',
-    'status-display-small',
-    'status-display-large',
-    'status-description',
-
-    // Home页面类
-    'home-container',
-    'home-page-header',
-    'home-page-title',
-    'home-page-description',
-    'page-grid',
-    'page-card',
-    'page-card-hover',
-    'page-icon',
-    'page-card-title',
-    'page-card-desc',
-    'debug-card',
-    'debug-card-hover',
-    'debug-icon',
-    'debug-section-title',
-    'debug-section-title-h2',
-    'projects-section',
-    'projects-header',
-    'projects-title',
-    'projects-description',
-    'projects-links',
-    'project-link-item',
-    'project-link-item-hover',
-    'project-link-item-current',
-
-    // Settings页面类
-    'settings-page',
-    'config-content',
-    'config-section',
-    'config-card',
-    'config-items',
-    'config-item',
-    'config-item-label',
-    'config-item-value',
-    'config-form',
-    'config-form-item',
-    'config-form-label',
-    'import-form',
-
-    // HeartbeatTest页面类
-    'heartbeat-test-page',
-    'test-config',
-    'config-row',
-    'config-item',
-    'config-item-label',
-    'test-results',
-    'stats-card',
-    'stats-content',
-    'stat-item',
-    'stat-label',
-    'stat-value',
-    'stat-value-success',
-    'stat-value-warning',
-    'stat-value-error',
-    'logs-card',
-    'logs-container',
-    'log-item',
-    'log-item-info',
-    'log-item-success',
-    'log-item-warning',
-    'log-item-error',
-    'log-time',
-    'log-level',
-    'log-level-info',
-    'log-level-success',
-    'log-level-warning',
-    'log-level-error',
-    'log-message',
-    'no-logs',
-    'grid-2',
-    'grid-3',
-    'grid-auto-fit',
-    'grid-auto-fill',
-    'basic-grid',
-    'basic-item',
-    'item-label',
-    'item-value',
-    'control-panel',
-    'control-card',
-    'control-row',
-    'control-item',
-    'control-item-label',
-    'mode-switch-container',
-    'mode-label',
-    'empty-state',
-    'empty-icon',
-    'empty-text',
-    'empty-description',
-    'loading-container',
-    'tooltip-content',
-    'stats-panel',
-    'stats-section',
-    'stats-section-h3',
-    'stats-grid',
-    'stat-item',
-    'stat-label',
-    'stat-value',
-
-    // Sidebar相关类
-    'sidebar',
-    'sidebar-header',
-    'logo-section',
-    'logo-icon',
-    'logo-section-h3',
-    'sidebar-menu',
-    'sidebar-nav',
-    'sidebar-footer',
-    'status-display',
-    'status-dot',
-    'status-text',
-    'quick-action-btn',
-    'version-display',
   ],
 
   // 主题配置
