@@ -21,10 +21,10 @@
 
     <!-- 测试配置 -->
     <div class="test-config">
-      <el-card class="config-card" shadow="never">
+      <el-card class="mb-6" shadow="never">
         <div class="config-row">
           <div class="config-item">
-            <label>WebSocket端点:</label>
+            <label class="config-item-label">WebSocket端点:</label>
             <el-select v-model="selectedEndpoint" placeholder="选择端点" :disabled="isTesting">
               <el-option
                 v-for="endpoint in availableEndpoints"
@@ -35,8 +35,8 @@
             </el-select>
           </div>
           <div class="config-item">
-            <label>心跳间隔:</label>
-            <el-select v-model="heartbeatInterval" :disabled="isTesting" style="width: 120px">
+            <label class="config-item-label">心跳间隔:</label>
+            <el-select v-model="heartbeatInterval" :disabled="isTesting" class="w-30">
               <el-option :value="1" label="1秒"></el-option>
               <el-option :value="2" label="2秒"></el-option>
               <el-option :value="5" label="5秒"></el-option>
@@ -62,7 +62,7 @@
         <el-col :span="8">
           <el-card class="stats-card" shadow="never">
             <template #header>
-              <span>心跳统计</span>
+              <span class="font-medium text-gray-900">心跳统计</span>
             </template>
             <div class="stats-content">
               <div class="stat-item">
@@ -97,12 +97,17 @@
         <el-col :span="16">
           <el-card class="logs-card" shadow="never">
             <template #header>
-              <span>测试日志</span>
+              <span class="font-medium text-gray-900">测试日志</span>
             </template>
             <div class="logs-container" ref="logsContainer">
-              <div v-for="(log, index) in logs" :key="index" class="log-item" :class="log.type">
+              <div
+                v-for="(log, index) in logs"
+                :key="index"
+                class="log-item"
+                :class="logClass(log)"
+              >
                 <span class="log-time">{{ formatTime(log.timestamp) }}</span>
-                <span class="log-level" :class="log.level">{{ log.level }}</span>
+                <span class="log-level" :class="logLevelClass(log)">{{ log.level }}</span>
                 <span class="log-message">{{ log.message }}</span>
               </div>
               <div v-if="logs.length === 0" class="no-logs">
@@ -164,10 +169,42 @@ const successRate = computed(() => {
 
 const successRateClass = computed(() => {
   const rate = successRate.value
-  if (rate === 100) return 'success'
-  if (rate >= 80) return 'warning'
-  return 'error'
+  if (rate >= 90) return 'stat-value-success'
+  if (rate >= 70) return 'stat-value-warning'
+  return 'stat-value-error'
 })
+
+// 日志项样式类
+const logClass = (log: any) => {
+  switch (log.type) {
+    case 'info':
+      return 'log-item-info'
+    case 'success':
+      return 'log-item-success'
+    case 'warning':
+      return 'log-item-warning'
+    case 'error':
+      return 'log-item-error'
+    default:
+      return 'log-item-info'
+  }
+}
+
+// 日志级别样式类
+const logLevelClass = (log: any) => {
+  switch (log.level) {
+    case 'info':
+      return 'log-level-info'
+    case 'success':
+      return 'log-level-success'
+    case 'warning':
+      return 'log-level-warning'
+    case 'error':
+      return 'log-level-error'
+    default:
+      return 'log-level-info'
+  }
+}
 
 // 处理器引用（用于清理）
 let currentMessageHandler: ((message: any) => void) | null = null
@@ -369,197 +406,8 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.heartbeat-test-page {
-  padding: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.page-header h2 {
-  margin: 0;
-  color: #333;
-}
-
-.header-actions {
-  display: flex;
-  gap: 12px;
-}
-
-.test-config {
-  margin-bottom: 24px;
-}
-
-.config-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.config-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.config-item label {
-  font-weight: 500;
-  color: #666;
-  white-space: nowrap;
-}
-
-.test-results {
-  margin-bottom: 24px;
-}
-
-.stats-card {
-  height: 100%;
-}
-
-.stats-content {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.stat-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.stat-item:last-child {
-  border-bottom: none;
-}
-
-.stat-label {
-  color: #666;
-  font-size: 14px;
-}
-
-.stat-value {
-  font-weight: 600;
-  color: #333;
-}
-
-.stat-value.success {
-  color: #67c23a;
-}
-
-.stat-value.warning {
-  color: #e6a23c;
-}
-
-.stat-value.error {
-  color: #f56c6c;
-}
-
-.logs-card {
-  height: 400px;
-}
-
-.logs-container {
-  height: 320px;
-  overflow-y: auto;
-  padding: 16px;
-  background: #fafafa;
-  border-radius: 4px;
-}
-
-.log-item {
-  margin-bottom: 8px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-family: 'Monaco', 'Consolas', monospace;
-  font-size: 12px;
-  line-height: 1.4;
-}
-
-.log-item.info {
-  background: #f0f9ff;
-  border-left: 3px solid #409eff;
-}
-
-.log-item.success {
-  background: #f0f9ff;
-  border-left: 3px solid #67c23a;
-}
-
-.log-item.warning {
-  background: #fdf6ec;
-  border-left: 3px solid #e6a23c;
-}
-
-.log-item.error {
-  background: #fef0f0;
-  border-left: 3px solid #f56c6c;
-}
-
-.log-time {
-  color: #909399;
-  margin-right: 8px;
-}
-
-.log-level {
-  display: inline-block;
-  width: 60px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 11px;
-  border-radius: 2px;
-  margin-right: 8px;
-}
-
-.log-level.info {
-  background: #ecf5ff;
-  color: #409eff;
-}
-
-.log-level.success {
-  background: #f0f9ff;
-  color: #67c23a;
-}
-
-.log-level.warning {
-  background: #fdf6ec;
-  color: #e6a23c;
-}
-
-.log-level.error {
-  background: #fef0f0;
-  color: #f56c6c;
-}
-
-.log-message {
-  color: #333;
-}
-
-.no-logs {
-  padding: 40px;
-}
-
-/* 响应式设计 */
+/* 只保留响应式设计 */
 @media (max-width: 768px) {
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .header-actions {
-    width: 100%;
-    justify-content: flex-end;
-  }
-
   .config-row {
     flex-direction: column;
     align-items: flex-start;

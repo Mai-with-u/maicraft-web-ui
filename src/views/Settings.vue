@@ -23,8 +23,8 @@
             <!-- WebSocket配置 -->
             <el-card class="config-card" shadow="never">
               <template #header>
-                <div class="card-header">
-                  <span>WebSocket 连接</span>
+                <div class="flex justify-between items-center">
+                  <span class="font-medium text-gray-900">WebSocket 连接</span>
                 </div>
               </template>
 
@@ -101,10 +101,10 @@
             </el-card>
 
             <!-- API配置 -->
-            <el-card class="config-card" shadow="never" style="margin-top: 20px">
+            <el-card class="config-card mt-5" shadow="never">
               <template #header>
-                <div class="card-header">
-                  <span>HTTP API 连接</span>
+                <div class="flex justify-between items-center">
+                  <span class="font-medium text-gray-900">HTTP API 连接</span>
                 </div>
               </template>
 
@@ -160,7 +160,7 @@
           description="请选择配置文件（JSON格式）进行导入，导入操作将覆盖现有配置。"
           type="warning"
           :closable="false"
-          style="margin-bottom: 20px"
+          class="mb-5"
         />
 
         <el-upload
@@ -349,116 +349,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.settings-page {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.page-header h2 {
-  margin: 0;
-  color: #333;
-}
-
-.header-actions {
-  display: flex;
-  gap: 12px;
-}
-
-.config-content {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-}
-
-.config-section {
-  padding: 20px;
-}
-
-.config-card {
-  margin-bottom: 20px;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.config-items {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 16px;
-}
-
-.config-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: #f8f9fa;
-  border-radius: 6px;
-}
-
-.config-item label {
-  font-weight: 500;
-  color: #666;
-  min-width: 100px;
-}
-
-.config-item span {
-  color: #333;
-  font-weight: 500;
-}
-
-.config-form {
-  padding: 20px 0;
-}
-
-.config-form .el-form-item {
-  margin-bottom: 20px;
-}
-
-.config-form .el-form-item__label {
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 8px;
-}
-
-.config-form .el-input__inner,
-.config-form .el-input-number__inner {
-  border-radius: 6px;
-}
-
-.config-form .el-textarea__inner {
-  border-radius: 6px;
-  resize: vertical;
-}
-
-.import-form {
-  padding: 20px 0;
-}
-
-/* 响应式设计 */
+/* 只保留响应式设计和必要的样式 */
 @media (max-width: 768px) {
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .header-actions {
-    width: 100%;
-    justify-content: flex-end;
-  }
-
   .config-items {
     grid-template-columns: 1fr;
   }
@@ -469,42 +361,29 @@ onMounted(() => {
     gap: 8px;
   }
 
-  .config-item label {
+  .config-item-label {
     min-width: auto;
   }
 }
-</style>
 
-<style scoped>
-.settings {
-  padding: 20px;
-  height: 100%;
-}
-
-.page-header {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
+/* 表单项样式 */
+.el-form-item {
   margin-bottom: 20px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
-.page-header h1 {
-  font-size: 28px;
-  font-weight: 600;
+.el-form-item__label {
+  font-weight: 500;
   color: #333;
   margin-bottom: 8px;
 }
 
-.page-header p {
-  color: #666;
-  font-size: 16px;
+.el-input__inner,
+.el-input-number__inner {
+  border-radius: 6px;
 }
 
-.coming-soon {
-  background: white;
-  padding: 60px 30px;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+.el-textarea__inner {
+  border-radius: 6px;
+  resize: vertical;
 }
 </style>

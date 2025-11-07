@@ -520,6 +520,319 @@ export default defineConfig({
       },
     ],
 
+    // Settings页面相关样式
+    [
+      'settings-page',
+      {
+        padding: '20px',
+        'max-width': '1200px',
+        margin: '0 auto',
+      },
+    ],
+    [
+      'config-content',
+      {
+        background: 'white',
+        'border-radius': '12px',
+        'box-shadow': '0 2px 12px rgba(0, 0, 0, 0.08)',
+      },
+    ],
+    [
+      'config-section',
+      {
+        padding: '20px',
+      },
+    ],
+    [
+      'config-card',
+      {
+        'margin-bottom': '20px',
+      },
+    ],
+    [
+      'config-items',
+      {
+        display: 'grid',
+        'grid-template-columns': 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: '16px',
+      },
+    ],
+    [
+      'config-item',
+      {
+        display: 'flex',
+        'align-items': 'center',
+        gap: '12px',
+        padding: '12px 16px',
+        background: '#f8f9fa',
+        'border-radius': '6px',
+      },
+    ],
+    [
+      'config-item-label',
+      {
+        'font-weight': '500',
+        color: '#666',
+        'min-width': '100px',
+      },
+    ],
+    [
+      'config-item-value',
+      {
+        color: '#333',
+        'font-weight': '500',
+      },
+    ],
+    [
+      'config-form',
+      {
+        padding: '20px 0',
+      },
+    ],
+    [
+      'config-form-item',
+      {
+        'margin-bottom': '20px',
+      },
+    ],
+    [
+      'config-form-label',
+      {
+        'font-weight': '500',
+        color: '#333',
+        'margin-bottom': '8px',
+      },
+    ],
+    [
+      'import-form',
+      {
+        padding: '20px 0',
+      },
+    ],
+
+    // HeartbeatTest页面相关样式
+    [
+      'heartbeat-test-page',
+      {
+        padding: '20px',
+        'max-width': '1400px',
+        margin: '0 auto',
+      },
+    ],
+    [
+      'test-config',
+      {
+        'margin-bottom': '24px',
+      },
+    ],
+    [
+      'config-row',
+      {
+        display: 'flex',
+        'align-items': 'center',
+        gap: '20px',
+        'flex-wrap': 'wrap',
+      },
+    ],
+    [
+      'config-item',
+      {
+        display: 'flex',
+        'align-items': 'center',
+        gap: '8px',
+      },
+    ],
+    [
+      'config-item-label',
+      {
+        'font-weight': '500',
+        color: '#666',
+        'white-space': 'nowrap',
+      },
+    ],
+    [
+      'test-results',
+      {
+        'margin-bottom': '24px',
+      },
+    ],
+    [
+      'stats-card',
+      {
+        height: '100%',
+      },
+    ],
+    [
+      'stats-content',
+      {
+        display: 'flex',
+        'flex-direction': 'column',
+        gap: '12px',
+      },
+    ],
+    [
+      'stat-item',
+      {
+        display: 'flex',
+        'justify-content': 'space-between',
+        'align-items': 'center',
+        padding: '8px 0',
+        'border-bottom': '1px solid #f0f0f0',
+      },
+    ],
+    [
+      'stat-item:last-child',
+      {
+        'border-bottom': 'none',
+      },
+    ],
+    [
+      'stat-label',
+      {
+        color: '#666',
+        'font-size': '14px',
+      },
+    ],
+    [
+      'stat-value',
+      {
+        'font-weight': '600',
+        color: '#333',
+      },
+    ],
+    [
+      'stat-value-success',
+      {
+        color: '#67c23a',
+      },
+    ],
+    [
+      'stat-value-warning',
+      {
+        color: '#e6a23c',
+      },
+    ],
+    [
+      'stat-value-error',
+      {
+        color: '#f56c6c',
+      },
+    ],
+    [
+      'logs-card',
+      {
+        height: '400px',
+      },
+    ],
+    [
+      'logs-container',
+      {
+        height: '320px',
+        'overflow-y': 'auto',
+        padding: '16px',
+        background: '#fafafa',
+        'border-radius': '4px',
+      },
+    ],
+    [
+      'log-item',
+      {
+        'margin-bottom': '8px',
+        padding: '8px 12px',
+        'border-radius': '4px',
+        'font-family': "'Monaco', 'Consolas', monospace",
+        'font-size': '12px',
+        'line-height': '1.4',
+      },
+    ],
+    [
+      'log-item-info',
+      {
+        background: '#f0f9ff',
+        'border-left': '3px solid #409eff',
+      },
+    ],
+    [
+      'log-item-success',
+      {
+        background: '#f0f9ff',
+        'border-left': '3px solid #67c23a',
+      },
+    ],
+    [
+      'log-item-warning',
+      {
+        background: '#fdf6ec',
+        'border-left': '3px solid #e6a23c',
+      },
+    ],
+    [
+      'log-item-error',
+      {
+        background: '#fef0f0',
+        'border-left': '3px solid #f56c6c',
+      },
+    ],
+    [
+      'log-time',
+      {
+        color: '#909399',
+        'margin-right': '8px',
+      },
+    ],
+    [
+      'log-level',
+      {
+        display: 'inline-block',
+        width: '60px',
+        'text-align': 'center',
+        'font-weight': '600',
+        'font-size': '11px',
+        'border-radius': '2px',
+        'margin-right': '8px',
+      },
+    ],
+    [
+      'log-level-info',
+      {
+        background: '#ecf5ff',
+        color: '#409eff',
+      },
+    ],
+    [
+      'log-level-success',
+      {
+        background: '#f0f9ff',
+        color: '#67c23a',
+      },
+    ],
+    [
+      'log-level-warning',
+      {
+        background: '#fdf6ec',
+        color: '#e6a23c',
+      },
+    ],
+    [
+      'log-level-error',
+      {
+        background: '#fef0f0',
+        color: '#f56c6c',
+      },
+    ],
+    [
+      'log-message',
+      {
+        color: '#333',
+      },
+    ],
+    [
+      'no-logs',
+      {
+        padding: '40px',
+      },
+    ],
+
     // Sidebar相关样式
     [
       'sidebar',
@@ -726,6 +1039,51 @@ export default defineConfig({
     'project-link-item',
     'project-link-item-hover',
     'project-link-item-current',
+
+    // Settings页面类
+    'settings-page',
+    'config-content',
+    'config-section',
+    'config-card',
+    'config-items',
+    'config-item',
+    'config-item-label',
+    'config-item-value',
+    'config-form',
+    'config-form-item',
+    'config-form-label',
+    'import-form',
+
+    // HeartbeatTest页面类
+    'heartbeat-test-page',
+    'test-config',
+    'config-row',
+    'config-item',
+    'config-item-label',
+    'test-results',
+    'stats-card',
+    'stats-content',
+    'stat-item',
+    'stat-label',
+    'stat-value',
+    'stat-value-success',
+    'stat-value-warning',
+    'stat-value-error',
+    'logs-card',
+    'logs-container',
+    'log-item',
+    'log-item-info',
+    'log-item-success',
+    'log-item-warning',
+    'log-item-error',
+    'log-time',
+    'log-level',
+    'log-level-info',
+    'log-level-success',
+    'log-level-warning',
+    'log-level-error',
+    'log-message',
+    'no-logs',
     'grid-2',
     'grid-3',
     'grid-auto-fit',
