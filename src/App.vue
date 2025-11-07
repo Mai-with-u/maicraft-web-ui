@@ -31,9 +31,9 @@ const handleRouteChange = () => {
 </script>
 
 <template>
-  <el-container class="app-container">
+  <el-container class="h-screen overflow-hidden">
     <Sidebar />
-    <el-main class="main-content">
+    <el-main class="bg-gray-50 p-5 overflow-y-auto overflow-x-hidden">
       <RouterView v-slot="{ Component }">
         <keep-alive :exclude="excludedComponents">
           <component :is="Component" />
@@ -44,6 +44,7 @@ const handleRouteChange = () => {
 </template>
 
 <style>
+/* 全局基础样式 */
 * {
   margin: 0;
   padding: 0;
@@ -58,18 +59,6 @@ body {
     Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-.app-container {
-  height: 100vh;
-  overflow: hidden;
-}
-
-.main-content {
-  background-color: #f5f5f5;
-  padding: 20px;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
 /* Element Plus 样式覆盖 */

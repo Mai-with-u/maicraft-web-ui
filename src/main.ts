@@ -3,7 +3,10 @@ import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
-// 导入通用样式
+// 导入UnoCSS样式
+import 'uno.css'
+
+// 导入通用样式（保留一些自定义样式）
 import '@/styles/common.css'
 
 import App from './App.vue'

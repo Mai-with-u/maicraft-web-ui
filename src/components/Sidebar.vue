@@ -4,11 +4,11 @@
     <div class="sidebar-header">
       <div class="logo-section">
         <el-icon class="logo-icon" v-if="!isCollapsed"><Grid /></el-icon>
-        <h3 v-if="!isCollapsed">Maicraft Web UI</h3>
+        <h3 class="logo-section-h3" v-if="!isCollapsed">Maicraft Web UI</h3>
       </div>
       <el-button
         type="text"
-        class="collapse-btn"
+        class="text-gray-600 hover:text-blue-500"
         @click="toggleCollapse"
         :icon="isCollapsed ? ArrowRight : ArrowLeft"
         size="small"
@@ -23,6 +23,7 @@
         :collapse="isCollapsed"
         :unique-opened="true"
         @select="handleSelect"
+        :collapse-transition="false"
       >
         <!-- 主页 -->
         <el-menu-item index="home">
@@ -113,9 +114,9 @@
     <!-- 侧边栏底部 -->
     <div class="sidebar-footer">
       <!-- 连接状态显示 -->
-      <div class="connection-status" v-if="!isCollapsed">
+      <div class="mb-3" v-if="!isCollapsed">
         <div class="status-display">
-          <div class="status-dot" :class="{ online: allConnected }"></div>
+          <div class="status-dot" :class="{ 'bg-green-500': allConnected }"></div>
           <span class="status-text">{{ connectionStatusText }}</span>
         </div>
       </div>
@@ -134,59 +135,60 @@
         </div>
         <el-button
           v-if="isMockMode"
-          class="quick-action-btn mock-connect-btn"
+          class="quick-action-btn mt-2"
           type="success"
           @click="handleQuickMockStart"
           size="small"
         >
-          <el-icon><VideoPlay /></el-icon>
+          <el-icon class="mr-1"><VideoPlay /></el-icon>
           <span>快速启动模拟</span>
         </el-button>
       </div>
 
       <!-- 连接控制按钮 -->
-      <div class="connection-controls" v-if="!isCollapsed">
-        <div class="connection-buttons">
+      <div class="mb-3" v-if="!isCollapsed">
+        <div class="flex gap-2">
           <el-button
-            class="quick-action-btn connect-btn"
+            class="quick-action-btn flex-1"
             :type="connectionButtonType"
             :loading="isConnecting"
             @click="handleConnectionToggle"
             size="small"
           >
-            <el-icon v-if="allConnected"><Switch /></el-icon>
-            <el-icon v-else><Link /></el-icon>
+            <el-icon class="mr-1" v-if="allConnected"><Switch /></el-icon>
+            <el-icon class="mr-1" v-else><Link /></el-icon>
             <span>{{ isMockMode ? '模拟连接' : '全部连接' }}</span>
           </el-button>
           <el-button
-            class="quick-action-btn disconnect-all-btn"
-            type="danger"
+            class="quick-action-btn flex-1 bg-red-50 border-red-200 text-red-600 hover:bg-red-100 hover:border-red-300"
             @click="handleDisconnectAll"
             size="small"
             :disabled="globalConnectionStatus.connectionCount === 0"
           >
-            <el-icon><SwitchButton /></el-icon>
+            <el-icon class="mr-1"><SwitchButton /></el-icon>
             <span>全部断开</span>
           </el-button>
         </div>
       </div>
 
       <!-- 全局监控按钮 -->
-      <div class="monitor-section" v-if="!isCollapsed">
+      <div class="mb-3" v-if="!isCollapsed">
         <el-button
-          class="quick-action-btn monitor-btn"
+          class="quick-action-btn"
           type="primary"
           @click="handleJumpToMonitor"
           size="small"
         >
-          <el-icon><Monitor /></el-icon>
+          <el-icon class="mr-1"><Monitor /></el-icon>
           <span>全局监控</span>
         </el-button>
       </div>
 
-      <div class="version-info" v-if="!isCollapsed">
-        <div class="version-display" @click="handleVersionClick">
-          <small>{{ currentVersion }} （点击查看更新日志）</small>
+      <div class="mb-3" v-if="!isCollapsed">
+        <div class="version-display hover:bg-gray-200" @click="handleVersionClick">
+          <small class="text-gray-600 text-xs font-medium"
+            >{{ currentVersion }} （点击查看更新日志）</small
+          >
         </div>
       </div>
     </div>
@@ -492,67 +494,12 @@ watch(
 </script>
 
 <style scoped>
-.sidebar {
-  height: 100vh;
-  background: #fff;
-  border-right: 1px solid #e6e6e6;
-  display: flex;
-  flex-direction: column;
-  transition: width 0.3s ease;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-}
-
+/* 只保留必要的样式 */
 .sidebar.collapsed {
   width: 64px;
 }
 
-.sidebar-header {
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  border-bottom: 1px solid #e6e6e6;
-  background: #fafafa;
-}
-
-.logo-section {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo-icon {
-  font-size: 28px;
-  color: #409eff;
-}
-
-.logo-section h3 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
-}
-
-.collapse-btn {
-  color: #666;
-}
-
-.collapse-btn:hover {
-  color: #409eff;
-}
-
-.sidebar-menu {
-  flex: 1;
-  overflow-y: auto;
-  padding: 12px 0;
-}
-
-.sidebar-nav {
-  border-right: none;
-  background: transparent;
-}
-
+/* Element Plus 菜单样式覆盖 */
 .sidebar-nav :deep(.el-menu-item) {
   height: 48px;
   line-height: 48px;
@@ -591,46 +538,6 @@ watch(
   padding-left: 56px !important;
 }
 
-.sidebar-footer {
-  padding: 20px;
-  border-top: 1px solid #e6e6e6;
-  background: #fafafa;
-}
-
-/* 连接状态显示样式 */
-.connection-status {
-  margin-bottom: 12px;
-}
-
-.status-display {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  background-color: #f8f9fa;
-  border-radius: 6px;
-  border: 1px solid #e9ecef;
-}
-
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #ff4d4f;
-  transition: background-color 0.3s ease;
-  flex-shrink: 0;
-}
-
-.status-dot.online {
-  background-color: #52c41a;
-}
-
-.status-text {
-  font-size: 12px;
-  color: #666;
-  font-weight: 500;
-}
-
 /* 模拟模式切换区域 */
 .mock-mode-section {
   margin: 12px 0;
@@ -651,101 +558,6 @@ watch(
   font-size: 12px;
   font-weight: 500;
   color: #67c23a;
-}
-
-.mock-connect-btn {
-  width: 100%;
-  margin-top: 8px;
-}
-
-/* 连接控制按钮样式 */
-.connection-controls {
-  margin-bottom: 12px;
-}
-
-.connection-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-/* 全局监控按钮样式 */
-.monitor-section {
-  margin-bottom: 12px;
-}
-
-.quick-action-btn {
-  width: 100%;
-  padding: 8px 12px;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.quick-action-btn .el-icon {
-  margin-right: 4px;
-  font-size: 14px;
-}
-
-.quick-action-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.disconnect-all-btn {
-  background-color: #fef2f2;
-  border-color: #fecaca;
-  color: #dc2626;
-}
-
-.disconnect-all-btn:hover {
-  background-color: #fee2e2;
-  border-color: #fca5a5;
-}
-
-.connect-btn {
-  background-color: #f0f9ff;
-  border-color: #bae6fd;
-  color: #0369a1;
-}
-
-.connect-btn:hover {
-  background-color: #e0f2fe;
-  border-color: #7dd3fc;
-}
-
-.monitor-btn {
-  background-color: #eff6ff;
-  border-color: #bfdbfe;
-  color: #2563eb;
-}
-
-.monitor-btn:hover {
-  background-color: #dbeafe;
-  border-color: #93c5fd;
-}
-
-.version-info {
-  margin-bottom: 12px;
-}
-
-.version-display {
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 6px;
-  padding: 4px 8px;
-}
-
-.version-display:hover {
-  background-color: #e6e6e6;
-  color: #409eff;
-}
-
-.version-display small {
-  color: inherit;
-  font-size: 12px;
-  font-weight: 500;
 }
 
 /* 滚动条样式 */
