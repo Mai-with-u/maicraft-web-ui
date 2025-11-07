@@ -160,6 +160,24 @@ const router = createRouter({
         title: 'WebSocket 测试',
       },
     },
+    // Maicraft-Next 主页
+    {
+      path: '/maicraft-next',
+      name: 'maicraft-next-home',
+      component: () => import('../views/MaicraftNextHome.vue'),
+      meta: {
+        title: 'Maicraft-Next 主页',
+      },
+    },
+    // Maicraft-Next 日志查看器
+    {
+      path: '/maicraft-next/logs',
+      name: 'maicraft-next-logs',
+      component: () => import('../views/MaicraftNextLogViewer.vue'),
+      meta: {
+        title: 'Maicraft-Next 日志查看器',
+      },
+    },
   ],
 })
 

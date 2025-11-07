@@ -210,6 +210,9 @@ interface Props {
   wsUrl?: string
   maxLogs?: number
   autoScroll?: boolean
+  externalMode?: boolean // 是否使用外部数据源模式
+  externalLogs?: LogEntry[] // 外部日志数据
+  externalConnected?: boolean // 外部连接状态
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -217,7 +220,17 @@ const props = withDefaults(defineProps<Props>(), {
   wsUrl: 'ws://localhost:20914/ws/logs',
   maxLogs: 1000,
   autoScroll: true,
+  externalMode: false,
+  externalLogs: () => [],
+  externalConnected: false,
 })
+
+// 定义 emits
+const emit = defineEmits<{
+  connect: []
+  disconnect: []
+  clearLogs: []
+}>()
 
 // 定义组件名称，供keep-alive识别
 defineOptions({
@@ -258,6 +271,10 @@ const globalConnectionStatus = getGlobalConnectionStatus()
 
 // 根据URL确定使用哪种日志数据
 const logs = computed(() => {
+  // 如果是外部模式，使用外部传入的日志
+  if (props.externalMode) {
+    return props.externalLogs || []
+  }
   // 如果是 MCP server 日志查看器
   if (props.wsUrl.includes('mcp-logs')) {
     return globalMcpLogs
@@ -268,6 +285,10 @@ const logs = computed(() => {
 
 // 根据URL确定连接状态
 const isConnected = computed(() => {
+  // 如果是外部模式，使用外部传入的连接状态
+  if (props.externalMode) {
+    return props.externalConnected || false
+  }
   if (props.wsUrl.includes('mcp-logs')) {
     return globalConnectionStatus.connectionStatus.MCP_LOGS || false
   }
@@ -619,6 +640,17 @@ const disconnect = () => {
 }
 
 const toggleConnection = () => {
+  // 如果是外部模式，发送事件
+  if (props.externalMode) {
+    if (isConnected.value) {
+      emit('disconnect')
+    } else {
+      emit('connect')
+    }
+    return
+  }
+  
+  // 否则使用原有的内部连接逻辑
   if (isConnected.value) {
     disconnect()
   } else {
@@ -870,11 +902,16 @@ const clearLogs = async () => {
       type: 'warning',
     })
 
-    // 使用store的clearEndpointData函数清空日志
-    if (props.wsUrl.includes('mcp-logs')) {
-      clearEndpointData('MCP_LOGS')
+    // 如果是外部模式，发送事件
+    if (props.externalMode) {
+      emit('clearLogs')
     } else {
-      clearEndpointData('LOGS')
+      // 使用store的clearEndpointData函数清空日志
+      if (props.wsUrl.includes('mcp-logs')) {
+        clearEndpointData('MCP_LOGS')
+      } else {
+        clearEndpointData('LOGS')
+      }
     }
 
     // 重置所有筛选状态到默认值

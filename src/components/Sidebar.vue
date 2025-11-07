@@ -15,9 +15,25 @@
       />
     </div>
 
+    <!-- 项目切换开关 -->
+    <div class="project-switch-section" v-if="!isCollapsed">
+      <div class="project-switch-header">
+        <span class="project-switch-label">{{ isNextMode ? 'Maicraft-Next' : 'Maicraft' }}</span>
+        <el-switch
+          v-model="isNextMode"
+          active-color="#67c23a"
+          inactive-color="#409eff"
+          @change="handleProjectModeToggle"
+          size="small"
+        />
+      </div>
+    </div>
+
     <!-- 导航菜单 -->
     <div class="sidebar-menu">
+      <!-- Maicraft 菜单 -->
       <el-menu
+        v-if="!isNextMode"
         :default-active="activeIndex"
         class="sidebar-nav"
         :collapse="isCollapsed"
@@ -106,6 +122,33 @@
           <el-icon><Setting /></el-icon>
           <template #title>
             <span>设置</span>
+          </template>
+        </el-menu-item>
+      </el-menu>
+
+      <!-- Maicraft-Next 菜单 -->
+      <el-menu
+        v-else
+        :default-active="activeIndex"
+        class="sidebar-nav"
+        :collapse="isCollapsed"
+        :unique-opened="true"
+        @select="handleSelect"
+        :collapse-transition="false"
+      >
+        <!-- 主页 -->
+        <el-menu-item index="maicraft-next-home">
+          <el-icon><House /></el-icon>
+          <template #title>
+            <span>主页</span>
+          </template>
+        </el-menu-item>
+
+        <!-- 日志查看器 -->
+        <el-menu-item index="maicraft-next-logs">
+          <el-icon><Document /></el-icon>
+          <template #title>
+            <span>日志查看器</span>
           </template>
         </el-menu-item>
       </el-menu>
@@ -239,6 +282,7 @@ const serverOnline = ref(true)
 const isMobile = ref(false)
 const showMobileSidebar = ref(false)
 const isMockMode = ref(getIsMockMode())
+const isNextMode = ref(false) // 是否为 Maicraft-Next 模式
 
 // WebSocket连接状态
 const globalConnectionStatus = getGlobalConnectionStatus()
@@ -284,6 +328,12 @@ const loadVersionInfo = () => {
 // 当前激活的菜单项
 const activeIndex = computed(() => {
   const path = route.path
+
+  // Maicraft-Next 路由
+  if (path === '/maicraft-next' || path === '/maicraft-next/home') return 'maicraft-next-home'
+  if (path === '/maicraft-next/logs') return 'maicraft-next-logs'
+
+  // Maicraft 路由
   if (path === '/' || path === '/home') return 'home'
   if (path === '/logs') return 'minecraft-logs'
   if (path === '/mcp-logs') return 'mcp-server-logs'
@@ -334,6 +384,18 @@ const handleMockModeToggle = (enabled: boolean) => {
   isMockMode.value = enabled
 }
 
+// 项目模式切换处理
+const handleProjectModeToggle = (enabled: boolean) => {
+  isNextMode.value = enabled
+  if (enabled) {
+    ElMessage.success('已切换到 Maicraft-Next 模式')
+    router.push('/maicraft-next')
+  } else {
+    ElMessage.success('已切换到 Maicraft 模式')
+    router.push('/')
+  }
+}
+
 // 快速启动模拟连接
 const handleQuickMockStart = async () => {
   try {
@@ -374,6 +436,12 @@ onMounted(() => {
   updateSidebarMargin()
   loadVersionInfo()
 
+  // 根据当前路由设置项目模式
+  const path = route.path
+  if (path.startsWith('/maicraft-next')) {
+    isNextMode.value = true
+  }
+
   // 定期同步模拟模式状态
   const syncMockModeTimer = setInterval(() => {
     isMockMode.value = getIsMockMode()
@@ -388,6 +456,15 @@ onMounted(() => {
 // 处理菜单选择
 const handleSelect = (index: string) => {
   switch (index) {
+    // Maicraft-Next 路由
+    case 'maicraft-next-home':
+      router.push('/maicraft-next')
+      break
+    case 'maicraft-next-logs':
+      router.push('/maicraft-next/logs')
+      break
+
+    // Maicraft 路由
     case 'home':
       router.push('/')
       break
@@ -484,11 +561,16 @@ const handleJumpToMonitor = () => {
   router.push('/websocket-monitor')
 }
 
-// 监听路由变化，更新活动菜单项
+// 监听路由变化，更新活动菜单项和项目模式
 watch(
   () => route.path,
-  () => {
-    // 活动菜单项会自动通过computed更新
+  (newPath) => {
+    // 根据路由自动切换项目模式
+    if (newPath.startsWith('/maicraft-next')) {
+      isNextMode.value = true
+    } else {
+      isNextMode.value = false
+    }
   },
 )
 </script>
@@ -536,6 +618,27 @@ watch(
 
 .sidebar-nav :deep(.el-menu--inline .el-menu-item) {
   padding-left: 56px !important;
+}
+
+/* 项目切换区域 */
+.project-switch-section {
+  margin: 12px;
+  padding: 10px;
+  background: rgba(64, 158, 255, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(64, 158, 255, 0.3);
+}
+
+.project-switch-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-switch-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #409eff;
 }
 
 /* 模拟模式切换区域 */
