@@ -1,17 +1,28 @@
 {
-  "current": "0.21.0",
+  "current": "0.22.0",
   "name": "Maicraft Web UI",
   "description": "Minecraft 服务器监控和管理界面",
-  "buildDate": "2025-10-06",
-  "buildTime": "23:06:49",
+  "buildDate": "2025-11-07",
+  "buildTime": "21:59:29",
   "buildInfo": "Vue 3 + TypeScript + Vite",
   "author": "ChangingSelf",
   "repository": "https://github.com/ChangingSelf/maicraft-web-ui",
   "license": "MIT",
   "changelog": {
-    "lastUpdated": "2025-10-06",
-    "totalVersions": 36,
+    "lastUpdated": "2025-11-07",
+    "totalVersions": 37,
     "versions": [
+      {
+        "version": "0.22.0",
+        "date": "2025-11-07",
+        "type": "minor",
+        "changes": {
+          "refactor": [
+            "引入unocss"
+          ]
+        },
+        "summary": "🔧 重构 - 引入unocss"
+      },
       {
         "version": "0.21.0",
         "date": "2025-10-06",

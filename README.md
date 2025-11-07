@@ -6,6 +6,8 @@ Minecraft 服务器监控和管理界面
 
 Maicraft Web UI 是 [Maicraft](https://github.com/MaiM-with-u/Maicraft) 项目的专用 Web 管理界面。
 
+0.22.0 是针对maicraft项目的最后一个版本，之后的版本将会开始支持[maicraft-next](https://github.com/Mai-with-u/maicraft-next)，将会留在maicraft分支
+
 ## 🚀 快速开始
 
 ### 安装依赖
