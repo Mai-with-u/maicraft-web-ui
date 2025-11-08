@@ -104,6 +104,10 @@
           <el-icon class="mr-1"><Document /></el-icon>
           查看日志
         </el-button>
+        <el-button type="info" @click="goToMemory">
+          <el-icon class="mr-1"><Memo /></el-icon>
+          查看记忆
+        </el-button>
       </div>
     </el-card>
 
@@ -172,13 +176,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import {
-  getMaicraftNextWebSocketManager,
-  connectMaicraftNext,
-  disconnectMaicraftNext,
-  subscribeMaicraftNext,
-  unsubscribeMaicraftNext,
-} from '../services/maicraftNextWebSocket'
+import { useMaicraftNextStore } from '../stores/maicraftNext'
 import {
   House,
   Connection,
@@ -190,6 +188,7 @@ import {
   Document,
   InfoFilled,
   Message,
+  Memo,
 } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
@@ -200,10 +199,15 @@ defineOptions({
 
 const router = useRouter()
 
+// 使用全局store
+const maicraftNextStore = useMaicraftNextStore()
+
+// 从store获取连接状态
+const isConnected = computed(() => maicraftNextStore.isConnected)
+const isConnecting = computed(() => maicraftNextStore.isConnecting)
+const subscribedTypes = computed(() => maicraftNextStore.subscribedTypes)
+
 // 响应式数据
-const isConnected = ref(false)
-const isConnecting = ref(false)
-const subscribedTypes = ref<string[]>([])
 const lastUpdate = ref(0)
 const recentMessages = ref<any[]>([])
 const wsUrl = ref('ws://localhost:25114/ws')
@@ -250,27 +254,23 @@ const getMessageType = (type: string) => {
 
 // 切换连接
 const toggleConnection = async () => {
-  if (isConnected.value) {
-    disconnectMaicraftNext()
+  if (maicraftNextStore.isConnected) {
+    maicraftNextStore.disconnect()
     ElMessage.info('已断开连接')
   } else {
-    isConnecting.value = true
     try {
-      connectMaicraftNext(wsUrl.value)
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await maicraftNextStore.connect(wsUrl.value)
       ElMessage.success('连接成功')
     } catch (error) {
       console.error('连接失败:', error)
       ElMessage.error('连接失败')
-    } finally {
-      isConnecting.value = false
     }
   }
 }
 
 // 订阅所有数据
 const subscribeAllData = () => {
-  const success = subscribeMaicraftNext(supportedDataTypes, 0)
+  const success = maicraftNextStore.subscribe('home-dashboard', supportedDataTypes, 0)
   if (success) {
     ElMessage.success('已发送订阅请求')
   } else {
@@ -280,17 +280,18 @@ const subscribeAllData = () => {
 
 // 取消所有订阅
 const unsubscribeAllData = () => {
-  const success = unsubscribeMaicraftNext(supportedDataTypes)
-  if (success) {
-    ElMessage.success('已取消所有订阅')
-  } else {
-    ElMessage.error('取消订阅失败')
-  }
+  maicraftNextStore.unsubscribe('home-dashboard')
+  ElMessage.success('已取消所有订阅')
 }
 
 // 跳转到日志页面
 const goToLogs = () => {
   router.push('/maicraft-next/logs')
+}
+
+// 跳转到记忆页面
+const goToMemory = () => {
+  router.push('/maicraft-next/memory')
 }
 
 // 清空消息
@@ -301,20 +302,8 @@ const clearMessages = () => {
 
 // 组件挂载
 onMounted(() => {
-  const manager = getMaicraftNextWebSocketManager(wsUrl.value)
-
-  // 处理连接状态变化
-  const handleConnectionChange = (connected: boolean) => {
-    isConnected.value = connected
-  }
-
-  // 处理消息
-  const handleMessage = (message: any) => {
-    // 更新订阅状态
-    if (message.type === 'subscriptionConfirmed' && message.data?.subscribedTypes) {
-      subscribedTypes.value = message.data.subscribedTypes
-    }
-
+  // 添加消息处理器用于显示最近消息
+  const removeMessageHandler = maicraftNextStore.addMessageHandler('home-dashboard', (message: any) => {
     // 忽略 ping/pong 消息
     if (message.type !== 'ping' && message.type !== 'pong') {
       // 添加到最近消息
@@ -330,20 +319,11 @@ onMounted(() => {
     }
 
     lastUpdate.value = Date.now()
-  }
-
-  // 添加处理器
-  manager.addConnectionHandler(handleConnectionChange)
-  manager.addMessageHandler(handleMessage)
-
-  // 如果已经连接，更新状态
-  isConnected.value = manager.isConnected
-  subscribedTypes.value = manager.subscribedTypes
+  })
 
   // 组件卸载时清理
   onUnmounted(() => {
-    manager.removeConnectionHandler(handleConnectionChange)
-    manager.removeMessageHandler(handleMessage)
+    removeMessageHandler()
   })
 })
 </script>

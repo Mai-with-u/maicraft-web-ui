@@ -151,6 +151,14 @@
             <span>日志查看器</span>
           </template>
         </el-menu-item>
+
+        <!-- 记忆查看器 -->
+        <el-menu-item index="maicraft-next-memory">
+          <el-icon><Memo /></el-icon>
+          <template #title>
+            <span>记忆查看器</span>
+          </template>
+        </el-menu-item>
       </el-menu>
     </div>
 
@@ -271,6 +279,7 @@ import {
   Switch,
   Link,
   VideoPlay,
+  Memo,
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -332,6 +341,7 @@ const activeIndex = computed(() => {
   // Maicraft-Next 路由
   if (path === '/maicraft-next' || path === '/maicraft-next/home') return 'maicraft-next-home'
   if (path === '/maicraft-next/logs') return 'maicraft-next-logs'
+  if (path === '/maicraft-next/memory') return 'maicraft-next-memory'
 
   // Maicraft 路由
   if (path === '/' || path === '/home') return 'home'
@@ -462,6 +472,9 @@ const handleSelect = (index: string) => {
       break
     case 'maicraft-next-logs':
       router.push('/maicraft-next/logs')
+      break
+    case 'maicraft-next-memory':
+      router.push('/maicraft-next/memory')
       break
 
     // Maicraft 路由

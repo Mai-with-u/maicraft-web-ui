@@ -18,14 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import LogViewer from '@/components/logging/LogViewer.vue'
-import {
-  getMaicraftNextWebSocketManager,
-  connectMaicraftNext,
-  disconnectMaicraftNext,
-  subscribeMaicraftNext,
-} from '../services/maicraftNextWebSocket'
+import { useMaicraftNextStore } from '../stores/maicraftNext'
 import type { MaicraftNextLogMessage } from '../types/maicraft-next'
 import { ElMessage } from 'element-plus'
 
@@ -46,18 +41,21 @@ interface LogEntry {
   formatted_timestamp?: string
 }
 
+// 使用全局store
+const maicraftNextStore = useMaicraftNextStore()
+
 // 响应式数据
 const logs = ref<LogEntry[]>([])
-const isConnected = ref(false)
+
+// 从store获取连接状态
+const isConnected = computed(() => maicraftNextStore.isConnected)
 
 // 连接处理
 const handleConnect = async () => {
   try {
-    connectMaicraftNext()
-    // 等待连接建立
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    // 订阅日志
-    subscribeMaicraftNext(['logs'], 0)
+    await maicraftNextStore.connect()
+    // 订阅日志数据
+    maicraftNextStore.subscribe('log-viewer', ['logs'], 0)
     ElMessage.success('连接成功')
   } catch (error) {
     console.error('连接失败:', error)
@@ -67,8 +65,8 @@ const handleConnect = async () => {
 
 // 断开连接处理
 const handleDisconnect = () => {
-  disconnectMaicraftNext()
-  ElMessage.info('已断开连接')
+  maicraftNextStore.unsubscribe('log-viewer')
+  ElMessage.info('已取消日志订阅')
 }
 
 // 清空日志处理
@@ -78,16 +76,8 @@ const handleClearLogs = () => {
 
 // 组件挂载
 onMounted(() => {
-  // 获取管理器并添加消息处理器
-  const manager = getMaicraftNextWebSocketManager()
-
-  // 处理连接状态变化
-  const handleConnectionChange = (connected: boolean) => {
-    isConnected.value = connected
-  }
-
-  // 处理消息
-  const handleMessage = (message: any) => {
+  // 添加消息处理器
+  const removeMessageHandler = maicraftNextStore.addMessageHandler('log-viewer', (message: any) => {
     // 处理日志消息 - 注意：服务端推送的类型是 logsUpdate
     if (message.type === 'logsUpdate' && message.data) {
       const logData = message.data
@@ -103,19 +93,17 @@ onMounted(() => {
         logs.value.shift()
       }
     }
+  })
+
+  // 如果已经订阅了日志，检查是否需要重新订阅
+  const subscription = maicraftNextStore.getComponentSubscriptions('log-viewer')
+  if (!subscription && maicraftNextStore.isConnected) {
+    maicraftNextStore.subscribe('log-viewer', ['logs'], 0)
   }
-
-  // 添加处理器
-  manager.addConnectionHandler(handleConnectionChange)
-  manager.addMessageHandler(handleMessage)
-
-  // 如果已经连接，更新状态
-  isConnected.value = manager.isConnected
 
   // 组件卸载时清理
   onUnmounted(() => {
-    manager.removeConnectionHandler(handleConnectionChange)
-    manager.removeMessageHandler(handleMessage)
+    removeMessageHandler()
   })
 })
 </script>

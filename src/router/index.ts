@@ -178,6 +178,15 @@ const router = createRouter({
         title: 'Maicraft-Next 日志查看器',
       },
     },
+    // Maicraft-Next 记忆查看器
+    {
+      path: '/maicraft-next/memory',
+      name: 'maicraft-next-memory',
+      component: () => import('../views/MaicraftNextMemoryViewer.vue'),
+      meta: {
+        title: 'Maicraft-Next 记忆查看器',
+      },
+    },
   ],
 })
 
