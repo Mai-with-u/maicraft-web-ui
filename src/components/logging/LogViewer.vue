@@ -160,6 +160,7 @@
         :line-number="index + 1"
         :expanded="expandedLogs[index]"
         @toggle-expand="toggleExpand(index)"
+        @show-raw-data="handleShowRawData"
       />
 
       <div v-if="filteredLogs.length === 0" class="no-logs">
@@ -175,6 +176,9 @@
       @apply="applySettings"
       @close="showSettings = false"
     />
+
+    <!-- 原始数据弹窗 -->
+    <RawLogDataModal v-model="showRawDataModal" :raw-data="selectedRawData" />
   </div>
 </template>
 
@@ -203,6 +207,7 @@ import LogControls from './LogControls.vue'
 import LogStats from './LogStats.vue'
 import LogEntry from './LogEntry.vue'
 import LogSettings from './LogSettings.vue'
+import RawLogDataModal from './RawLogDataModal.vue'
 
 // Props定义
 interface Props {
@@ -299,6 +304,10 @@ const selectedModules = ref<string[]>([]) // 空数组表示全选所有模块
 const showSettings = ref(false)
 const logsContainer = ref<HTMLElement>()
 const expandedLogs = ref<Record<number, boolean>>({})
+
+// 原始数据弹窗相关
+const showRawDataModal = ref(false)
+const selectedRawData = ref<any>(null)
 
 // 搜索相关
 const searchQuery = ref('')
@@ -607,6 +616,12 @@ const toggleExpand = (index: number) => {
   expandedLogs.value[index] = !expandedLogs.value[index]
 }
 
+// 处理显示原始数据弹窗
+const handleShowRawData = (rawData: any) => {
+  selectedRawData.value = rawData
+  showRawDataModal.value = true
+}
+
 const truncateMessage = (message: string): string => {
   if (message.length <= 200) return message
   return message.substring(0, 200) + '...'
@@ -649,7 +664,7 @@ const toggleConnection = () => {
     }
     return
   }
-  
+
   // 否则使用原有的内部连接逻辑
   if (isConnected.value) {
     disconnect()

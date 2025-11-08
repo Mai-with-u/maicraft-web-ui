@@ -1,5 +1,9 @@
 <template>
-  <div class="log-entry" :class="[getLogClass(log.level), { 'log-merged': log.merged }]">
+  <div
+    class="log-entry"
+    :class="[getLogClass(log.level), { 'log-merged': log.merged, clickable: hasRawData }]"
+    @click="handleEntryClick"
+  >
     <!-- 展开/收起按钮 -->
     <div class="log-expand-btn">
       <el-button
@@ -44,7 +48,13 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { ArrowDown, ArrowUp } from '@element-plus/icons-vue'
+
+const emit = defineEmits<{
+  toggleExpand: []
+  showRawData: [rawData: any]
+}>()
 
 // Props定义
 interface LogEntry {
@@ -56,6 +66,7 @@ interface LogEntry {
   lastTimestamp?: number | string
   merged?: boolean
   formatted_timestamp?: string
+  rawData?: any // 原始 WebSocket 消息数据
 }
 
 interface Props {
@@ -74,8 +85,9 @@ defineOptions({
 })
 
 // 工具函数
-const formatTime = (timestamp: number): string => {
-  const date = new Date(timestamp)
+const formatTime = (timestamp: number | string): string => {
+  const timestampNum = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp
+  const date = new Date(timestampNum)
   const timeString = date.toLocaleString('zh-CN', {
     year: 'numeric',
     month: '2-digit',
@@ -97,10 +109,25 @@ const truncateMessage = (message: string): string => {
   return message.substring(0, 200) + '...'
 }
 
-// 事件定义
-defineEmits<{
-  toggleExpand: []
-}>()
+// 计算属性：是否包含原始数据
+const hasRawData = computed(() => {
+  return !!props.log.rawData
+})
+
+// 处理日志条目点击
+const handleEntryClick = (event: MouseEvent) => {
+  // 如果点击的是展开按钮，不要触发显示原始数据的逻辑
+  if ((event.target as HTMLElement)?.closest('.expand-toggle-btn')) {
+    return
+  }
+
+  // 如果有原始数据，则显示弹窗
+  if (hasRawData.value) {
+    emit('showRawData', props.log.rawData)
+  }
+}
+
+// 事件定义已在上面声明
 </script>
 
 <style scoped>
@@ -116,6 +143,16 @@ defineEmits<{
 
 .log-entry:hover {
   background-color: rgba(0, 0, 0, 0.02);
+}
+
+.log-entry.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.log-entry.clickable:hover {
+  background-color: rgba(64, 158, 255, 0.05);
+  border-left-color: #409eff;
 }
 
 .log-expand-btn {

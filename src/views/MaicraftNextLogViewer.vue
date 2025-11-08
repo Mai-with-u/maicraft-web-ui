@@ -39,6 +39,7 @@ interface LogEntry {
   lastTimestamp?: number | string
   merged?: boolean
   formatted_timestamp?: string
+  rawData?: any // 保存原始 WebSocket 消息数据
 }
 
 // 使用全局store
@@ -86,6 +87,7 @@ onMounted(() => {
         level: logData.level || 'INFO',
         module: logData.module || 'Unknown',
         message: logData.message || '',
+        rawData: message, // 保存完整的原始 WebSocket 消息
       })
 
       // 限制日志数量
