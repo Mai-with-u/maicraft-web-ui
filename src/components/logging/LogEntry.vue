@@ -10,7 +10,7 @@
         v-if="log.message.length > 200"
         :type="expanded ? 'primary' : 'info'"
         size="small"
-        @click="$emit('toggleExpand')"
+        @click.stop="$emit('toggleExpand')"
         :icon="expanded ? ArrowUp : ArrowDown"
         class="expand-toggle-btn"
         circle
